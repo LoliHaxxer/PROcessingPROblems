@@ -1,11 +1,15 @@
 
 
-PImage i;
+ScaImage<Image> i;
+
+PImage badi;
 
 void setup()
 {
-  size( 1200, 675 );
-  i = loadImage( "ddos.png" );
+  frameRate( 60 );
+  fullScreen();
+  badi = super.loadImage( "ddos.png" );
+  i = new ScaImage( loadImage( "ddos.png" ) );
 }
 
 
@@ -13,11 +17,16 @@ void draw()
 {
   background( 0 );
   
-  g.image( i, 0, 0, i.width * zoom, i.height * zoom );
+  //Image ii = i.get( zoom );
+  
+  //g.image( ii, 0, 0 );
+  
+  g.image( badi, 0, 0, badi.width * zoom, badi.height * zoom );
   
   fps();
 }
 
+float azoom;
 int frames;
 int last = millis() ;
 
@@ -25,12 +34,19 @@ void fps()
 {
   int now = millis();
   
+  azoom += zoom;
   frames += 1;
   
   if( ( now - last ) * .001 >= 1 )
   {
     println( frames + " fps" );
-    frames = 0;
+    
+    final float az = (float)azoom / frames;
+    println( "average zoom: " + az );
+    println( "image w: " + badi.width * az + " , h: " + badi.height * az );
+    println();
+    
+    azoom = frames = 0;
     last = now;
   }
 }
